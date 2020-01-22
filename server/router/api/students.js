@@ -13,10 +13,23 @@ router.get('/', async (req, res) => {
 });
 
 // add student
+router.post('/', async (req, res) => {
+    const students = await loadStudentsCollection();
+    await students.insertOne({
+        name: req.body.name,
+        createdAt: new Date()
+    });
+    res.status(201).send();
+});
 
 // update student
 
 // delete student
+router.delete('/:id', async (req, res) => {
+    const students = await loadStudentsCollection();
+    await students.deleteOne({ _id: new mongodb.ObjectID(req.params.id) });
+    res.status(200).send();
+});
 
 async function loadStudentsCollection() {
     const client = await mongodb.MongoClient.connect
